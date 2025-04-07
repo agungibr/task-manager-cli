@@ -1,3 +1,39 @@
-public class Priority {
-    
+public enum Priority {
+    URGENT("Mendesak", 3),
+    IMPORTANT("Penting", 2),
+    NOT_URGENT("Tidak Mendesak", 1),
+    NOT_IMPORTANT("Tidak Penting", 0);
+
+    private final String description;
+    private final int level;
+
+    Priority(String description, int level) {
+        this.description = description;
+        this.level = level;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public boolean isHighPriority() {
+        return level >= 2; // URGENT or IMPORTANT
+    }
+
+    public boolean isLowPriority() {
+        return level <= 1; // NOT_URGENT or NOT_IMPORTANT
+    }
+
+    public static Priority getByLevel(int level) {
+        for (Priority p : values()) {
+            if (p.getLevel() == level) {
+                return p;
+            }
+        }
+        return null;
+    }
 }
