@@ -21,11 +21,11 @@ public enum Priority {
     }
 
     public boolean isHighPriority() {
-        return level >= 2; // URGENT or IMPORTANT
+        return level >= 2;
     }
 
     public boolean isLowPriority() {
-        return level <= 1; // NOT_URGENT or NOT_IMPORTANT
+        return level <= 1;
     }
 
     public static Priority getByLevel(int level) {

@@ -4,10 +4,11 @@ public class Reminder extends Task {
     private LocalDateTime reminderDateTime;
     private boolean isActive;
 
-    public Reminder(String taskId, String title, String description, LocalDateTime dueDate, LocalDateTime reminderDateTime) {
-        super(taskId, title, description, dueDate);
-        this.reminderDateTime = reminderDateTime;
-        this.isActive = true; 
+    public Reminder(int taskId, String title, String description, 
+                   LocalDateTime dueDate, User creator, LocalDateTime reminderDateTime) {
+        super(taskId, title, description, dueDate, creator);
+        setReminderDateTime(reminderDateTime);
+        this.isActive = true;
     }
 
     public LocalDateTime getReminderDateTime() {
@@ -15,26 +16,34 @@ public class Reminder extends Task {
     }
 
     public void setReminderDateTime(LocalDateTime reminderDateTime) {
+        if (reminderDateTime == null) {
+            throw new IllegalArgumentException("Reminder date/time cannot be null");
+        }
+        if (reminderDateTime.isAfter(getDueDate())) {
+            throw new IllegalArgumentException("Reminder cannot be after due date");
+        }
         this.reminderDateTime = reminderDateTime;
     }
 
     public void activateReminder() {
-        isActive = true;
-        System.out.println("Reminder diaktifkan untuk: " + getTitle());
+        this.isActive = true;
     }
 
     public void deactivateReminder() {
-        isActive = false;
-        System.out.println("Reminder dinonaktifkan untuk: " + getTitle());
+        this.isActive = false;
     }
 
     public boolean isReminderActive() {
         return isActive;
     }
 
-    public void checkReminder() {
-        if (isActive && LocalDateTime.now().isAfter(reminderDateTime)) {
-            System.out.println("Reminder: " + getTitle() + " akan hampir habis");
-        }
+    public boolean shouldTrigger() {
+        return isActive && LocalDateTime.now().isAfter(reminderDateTime);
+    }
+
+    @Override
+    public String toString() {
+        return "Reminder for '" + getTitle() + "' at " + reminderDateTime + 
+               " (Active: " + isActive + ")";
     }
 }
